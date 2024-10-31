@@ -8,6 +8,7 @@ import { SearchOutlined } from "@ant-design/icons";
 import SquareButton from "../components/button/squareButton";
 import useWindowWidth from "@/hooks/useWindowWidth";
 import HistoryItem from '@/components/historyItem/HistoryItem';
+import { getWeather } from '@/api/getWeather';
 
 const dummyData = [
   {
@@ -27,17 +28,54 @@ const dummyData = [
 export default function Home() {
   const width = useWindowWidth();
 
+  const [weatherData, setWeatherData] = useState({});
+  const [date, setDate] = useState(null);
   const [historyList, setHistoryList] = useState(dummyData);
   const [location, setLocation] = useState('');
+  console.log("🚀 ~ Home ~ location:", location)
 
   const isMobile = width < 510; // You can adjust the breakpoint as needed
+
+  const initData = (value) => {
+    const getCurrentDateTime = (new Date).toLocaleString()
+    if(value){
+      getWeather(value).then(res => {
+        setWeatherData(res);
+        setDate(getCurrentDateTime);
+      }).catch((err) => {
+        console.error(err)
+      })
+    }
+  }
+
+  useEffect(() => {
+    initData('spain');
+  }, []);
 
   const handleInput = (e) => {
     setLocation(e.target.value);
   }
 
-  const handleSearch = () => {
-    
+  const handleSearch = (value) => {
+    const getCurrentDateTime = (new Date).toLocaleString();
+    if(value){
+      getWeather(value).then((res) => {
+        setWeatherData(res);
+        setDate(getCurrentDateTime);
+      }).catch(err => {
+        console.error(err);
+      })
+    }
+  }
+
+  let countryName, temperature, highest, lowest, humidity, isCloud;
+  if(weatherData){
+    countryName = weatherData?.name;
+    temperature = weatherData?.main?.temp;
+    highest = weatherData?.main?.temp_max;
+    lowest = weatherData?.main?.temp_min;
+    humidity = weatherData?.main?.humidity;
+    isCloud = weatherData?.clouds?.all > 50 ? true : false
   }
     
   return (
@@ -62,7 +100,7 @@ export default function Home() {
           
             <SquareButton 
               icon={<SearchOutlined style={{color: 'white'}}/>}
-              handleOnClick={handleSearch}
+              handleOnClick={() => handleSearch(location)}
             />
           </div>
 
@@ -89,20 +127,22 @@ export default function Home() {
                       </p>
 
                       <p className="text-white font-bold leading-none degree-text">
-                        26º
+                        {`${temperature ? temperature : '0'}º`}
                       </p>
                    
                       <div className="flex gap-2 justify-start general-text">
                         <p>
-                          H: 29º
+                          { highest && `H: ${highest}º`}
+                          { !highest && `H: N/A`}
                         </p>
                         <p>
-                          L: 26º
+                          { lowest && `H: ${lowest}º`}
+                          { !lowest && `H: N/A`}
                         </p>
                       </div>
 
                       <p className="text-white font-bold general-text">
-                        Johor, MY
+                        {countryName ? countryName : ''}
                       </p>
                   </div>
                   
@@ -110,9 +150,16 @@ export default function Home() {
                     className="flex flex-col items-end gap-1"
                     style={{ paddingTop: '3.75rem' }}
                   >
-                    <p className="text-white general-text">Clouds</p>
-                    <p className="text-white general-text">Humidity: 58%</p>
-                    <p className="text-white general-text">01-09-2022 09:41am</p>
+                    <p className="text-white general-text">
+                      {isCloud ? 'Clouds' : 'No Clouds'}
+                    </p>
+                    <p className="text-white general-text">
+                      {humidity && `Humidity: ${humidity}%`}
+                      {!humidity && `Humidity: N/A`}
+                    </p>
+                    <p className="text-white general-text">
+                      {date ? date : null}
+                    </p>
                   </div>
               </div>
               :
@@ -123,33 +170,36 @@ export default function Home() {
                       </p>
 
                       <p className="text-white font-bold leading-none degree-text">
-                        26º
+                        {`${weatherData?.main?.temp}º`}
                       </p>
                    
                       <div className="flex gap-2 justify-start general-text">
                         <p>
-                          H: 29º
+                          { highest && `H: ${highest}º`}
+                          { !highest && `H: N/A`}
                         </p>
                         <p>
-                          L: 26º
+                          { lowest && `H: ${lowest}º`}
+                          { !lowest && `H: N/A`}
                         </p>
                       </div>
 
                       <div className='flex justify-evenly w-full gap-4'>
                         <p className="text-white font-bold general-text">
-                          Johor, MY
+                          {countryName ? countryName : ''}
                         </p>
 
                         <p className="text-white general-text">
-                          01-09-2022 09:41am
+                          {date ? date : null}
                         </p>
 
                         <p className="text-white general-text">
-                          Humidity: 58%
+                          {humidity && `Humidity: ${humidity}%`}
+                          {!humidity && `Humidity: N/A`}
                         </p>
 
                         <p className="text-white general-text">
-                          Clouds
+                          {isCloud ? 'Clouds' : 'No Clouds'}
                         </p>
                       </div>
                   </div>
