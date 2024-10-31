@@ -17,6 +17,7 @@ module.exports = {
         customGray: "rgb(110, 102, 128)"
       },
       screens: {
+        'sm': '511px',
         'max-300': {'max': '300px'},
         'max-510': {'max': '510px'} // Custom breakpoint for max-width 510px
       }

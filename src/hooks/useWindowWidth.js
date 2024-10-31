@@ -1,19 +1,22 @@
 import { useState, useEffect } from 'react';
 
 const useWindowWidth = () => {
-    // State to hold the window width
-    const [windowWidth, setWindowWidth] = useState(window.innerWidth);
+    // Initialize state with a default value of 0 (or use a specific value if preferred)
+    const [windowWidth, setWindowWidth] = useState(0);
 
     useEffect(() => {
-        // Function to update the width
+        // Only access `window` on the client side
         const handleResize = () => {
             setWindowWidth(window.innerWidth);
         };
 
-        // Add event listener on component mount
+        // Set initial width on client-side only
+        handleResize();
+
+        // Add resize event listener
         window.addEventListener('resize', handleResize);
 
-        // Clean up the event listener on component unmount
+        // Clean up event listener on unmount
         return () => {
             window.removeEventListener('resize', handleResize);
         };
