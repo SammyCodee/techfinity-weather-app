@@ -3,19 +3,85 @@
 @tailwind utilities;
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+    --background: #ffffff;
+    --foreground: #171717;
 }
 
 @media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+    :root {
+        --background: #0a0a0a;
+        --foreground: #ededed;
+    }
 }
 
 body {
-  color: var(--foreground);
-  background: var(--background);
-  font-family: Arial, Helvetica, sans-serif;
+    color: var(--foreground);
+    background: var(--background);
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+.custom-input {
+    background-color: rgba(
+        26,
+        26,
+        26,
+        0.5
+    ) !important; /* Your custom purple color */
+    color: white !important; /* Text color */
+}
+
+.custom-input:focus {
+    background-color: rgba(
+        26,
+        26,
+        26,
+        0.5
+    ) !important; /* Maintain the same background color on focus */
+    border-color: transparent; /* Optional: remove the border */
+}
+
+.custom-search-btn {
+    background-color: rgba(
+        26,
+        26,
+        26,
+        0.5
+    ) !important; /* Your custom purple color */
+    color: white !important; /* Text color */
+}
+
+.cloud-size-small-view {
+    left: 83%;
+    top: 6%;
+}
+
+.general-text {
+    font-size: 14px;
+}
+
+.degree-text {
+    font-size: 54px;
+}
+
+.small-text {
+    font-size: 10px;
+}
+
+@media (max-width: 510px) {
+    .cloud-size-small-view {
+        left: 80%;
+        top: 0%;
+    }
+}
+
+@media (max-width: 400px) {
+    .cloud-size-small-view {
+        left: 78%;
+    }
+}
+
+@media (max-width: 370px) {
+    .cloud-size-small-view {
+        left: 75%;
+    }
 }

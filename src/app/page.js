@@ -1,101 +1,148 @@
+"use client";
+import './globals.css';
+import { useEffect, useState } from "react";
 import Image from "next/image";
+import { Input } from "antd";
+import { dark_bg } from "../../public/image";
+import { SearchOutlined } from "@ant-design/icons";
+import SquareButton from "../components/button/squareButton";
+import useWindowWidth from "@/hooks/useWindowWidth";
+import HistoryItem from '@/components/historyItem/HistoryItem';
+
+const dummyData = [
+  {
+    location: 'Johor, MY',
+    time: '01-09-2022 09:41am'
+  },
+  {
+    location: 'Osaka, JP',
+    time: '01-09-2022 09:41am'
+  },
+  {
+    location: 'Seoul, KR',
+    time: '01-09-2022 09:41am'
+  }
+];
 
 export default function Home() {
-  return (
-    <div className="grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]">
-      <main className="flex flex-col gap-8 row-start-2 items-center sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
-        />
-        <ol className="list-inside list-decimal text-sm text-center sm:text-left font-[family-name:var(--font-geist-mono)]">
-          <li className="mb-2">
-            Get started by editing{" "}
-            <code className="bg-black/[.05] dark:bg-white/[.06] px-1 py-0.5 rounded font-semibold">
-              src/app/page.js
-            </code>
-            .
-          </li>
-          <li>Save and see your changes instantly.</li>
-        </ol>
+  const width = useWindowWidth();
 
-        <div className="flex gap-4 items-center flex-col sm:flex-row">
-          <a
-            className="rounded-full border border-solid border-transparent transition-colors flex items-center justify-center bg-foreground text-background gap-2 hover:bg-[#383838] dark:hover:bg-[#ccc] text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
+  const [historyList, setHistoryList] = useState(dummyData);
+  const [location, setLocation] = useState('');
+
+  const isMobile = width < 510; // You can adjust the breakpoint as needed
+
+  const handleInput = (e) => {
+    setLocation(e.target.value);
+  }
+
+  const handleSearch = () => {
+    
+  }
+    
+  return (
+    <div 
+      className="flex min-h-screen justify-center p-4 gap-2 bg-cover bg-center min-w-[15rem] sm:font-[family-name:var(--font-geist-sans)]"
+      style={{
+        backgroundImage: "url('/image/bg-dark.png')"
+      }}
+    >
+      <div className="flex flex-col min-w-screen w-full max-w-[30rem]">
+        
+          <div className="flex gap-2 mb-16 max-h-8 w-full max-510:mb-24">
+            <Input 
+              placeholder="Country/City"
+              style={{
+                minWidth: '8rem',
+              }}
+              value={location}
+              onChange={(e) => handleInput(e)}
+              className="bg-primaryPurple border-0 placeholder-white custom-input"
             />
-            Deploy now
-          </a>
-          <a
-            className="rounded-full border border-solid border-black/[.08] dark:border-white/[.145] transition-colors flex items-center justify-center hover:bg-[#f2f2f2] dark:hover:bg-[#1a1a1a] hover:border-transparent text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 sm:min-w-44"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Read our docs
-          </a>
-        </div>
-      </main>
-      <footer className="row-start-3 flex gap-6 flex-wrap items-center justify-center">
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
-          />
-          Learn
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
-          />
-          Examples
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to nextjs.org →
-        </a>
-      </footer>
+          
+            <SquareButton 
+              icon={<SearchOutlined style={{color: 'white'}}/>}
+              handleOnClick={handleSearch}
+            />
+          </div>
+
+          <div className="flex flex-col w-full gap-2 p-4 items-center rounded-3xl bg-secondaryPurple relative">
+              
+              <div 
+                className={`absolute min-h-[5rem] min-w-[5rem] bg-cover cloud-size-small-view ${isMobile && `w-[7.5rem] h-[8rem]`} sm:h-[9rem] w-[9rem]`}
+                style={{
+                  backgroundImage: "url('/image/sun.png')",
+                  border: '1px solid white',
+                  transform: 'translate(-50%, -50%)' // Center it based on its own dimensions
+                }}
+              />
+
+              {isMobile ?
+                <div className="grid grid-cols-2 min-h-[8rem] w-full">
+                  <div className="flex flex-col justify-start gap-1">
+                      <p className="text-white general-text">
+                        Today's Weather
+                      </p>
+
+                      <p className="text-white font-bold leading-none degree-text">
+                        26º
+                      </p>
+                   
+                      <div className="flex gap-2 justify-start general-text">
+                        <p>
+                          H: 29º
+                        </p>
+                        <p>
+                          L: 26º
+                        </p>
+                      </div>
+
+                      <p className="text-white font-bold general-text">
+                        Johor, MY
+                      </p>
+                  </div>
+                  
+                  <div 
+                    className="flex flex-col items-end gap-1"
+                    style={{ paddingTop: '3.75rem' }}
+                  >
+                    <p className="text-white general-text">Clouds</p>
+                    <p className="text-white general-text">Humidity: 58%</p>
+                    <p className="text-white general-text">01-09-2022 09:41am</p>
+                  </div>
+              </div>
+              :
+              <div className="flex min-h-[8rem] w-full bg-yellow-400">
+                  <div className="flex flex-col justify-start ">
+
+                  </div>
+              </div>
+              }
+
+              <div className="flex flex-col min-h-[8rem] p-4 gap-4 w-full bg-tertiaryPurple rounded-3xl">
+                  <p className="text-white general-text">
+                    Search History
+                  </p>
+
+                  <div className='flex flex-col w-full gap-4'>
+                    {historyList && historyList.length > 0 && historyList.map((data, index) => {
+                      return(
+                        <div key={`${data.location}-${index}`}>
+                            <HistoryItem 
+                              location={data.location}
+                              dateTime={data.time}
+                            />
+                        </div>
+                      )
+                    })}
+
+                    {historyList.length === 0 && <h1>No Record</h1>}
+                  </div>
+                  
+              </div>
+          </div>
+
+      </div>
     </div>
   );
 }
