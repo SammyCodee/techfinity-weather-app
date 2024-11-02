@@ -3,52 +3,43 @@ import './globals.css';
 import { useEffect, useState } from "react";
 import Image from "next/image";
 import { Input } from "antd";
-import { dark_bg } from "../../public/image";
 import { SearchOutlined } from "@ant-design/icons";
 import SquareButton from "../components/button/squareButton";
 import useWindowWidth from "@/hooks/useWindowWidth";
 import HistoryItem from '@/components/historyItem/HistoryItem';
 import { getWeather } from '@/api/getWeather';
 
-const dummyData = [
-  {
-    location: 'Johor, MY',
-    time: '01-09-2022 09:41am'
-  },
-  {
-    location: 'Osaka, JP',
-    time: '01-09-2022 09:41am'
-  },
-  {
-    location: 'Seoul, KR',
-    time: '01-09-2022 09:41am'
-  }
-];
-
 export default function Home() {
   const width = useWindowWidth();
 
   const [weatherData, setWeatherData] = useState({});
   const [date, setDate] = useState(null);
-  const [historyList, setHistoryList] = useState(dummyData);
+  const [historyList, setHistoryList] = useState([]);
   const [location, setLocation] = useState('');
-  console.log("🚀 ~ Home ~ location:", location)
+  const [notFound, setNotFound] = useState(false);
+  const [errorMessage, setErrorMessage] = useState("");
 
   const isMobile = width < 510; // You can adjust the breakpoint as needed
 
   const initData = (value) => {
-    const getCurrentDateTime = (new Date).toLocaleString()
+    const getCurrentDateTime = (new Date).toLocaleString();
     if(value){
       getWeather(value).then(res => {
         setWeatherData(res);
         setDate(getCurrentDateTime);
       }).catch((err) => {
-        console.error(err)
+        console.error(err);
       })
+    } else {
+      setNotFound(true);
+      setErrorMessage("Something went wrong");
     }
   }
 
   useEffect(() => {
+    /**
+     * Default is Spain
+     */
     initData('spain');
   }, []);
 
@@ -58,13 +49,42 @@ export default function Home() {
 
   const handleSearch = (value) => {
     const getCurrentDateTime = (new Date).toLocaleString();
+    /**
+     * setNotFound here to control the input shaking effects of no result
+     */
+    setNotFound(false);
     if(value){
       getWeather(value).then((res) => {
         setWeatherData(res);
         setDate(getCurrentDateTime);
+        pushToHistoryList(res, getCurrentDateTime);
+        setNotFound(false);
       }).catch(err => {
+        setNotFound(true);
+        setErrorMessage("Location Not Found");
         console.error(err);
       })
+    }
+    if (value == "") {
+      setNotFound(true);
+      setErrorMessage("Please Enter City/Country");
+    }
+  }
+
+  const pushToHistoryList = (res, dateTime) => {
+    let obj = {};
+    obj["location"] = res.name;
+    obj["time"] = dateTime;
+    const newHistoryList = [...historyList];
+    newHistoryList.unshift(obj);
+    setHistoryList(newHistoryList);
+  }
+
+  const deleteFromHistoryList = (index, list) => {
+    if(list.length > -1){
+      list.splice(index, 1);
+      const newHistoryList = [...list];
+      setHistoryList(newHistoryList);
     }
   }
 
@@ -75,7 +95,7 @@ export default function Home() {
     highest = weatherData?.main?.temp_max;
     lowest = weatherData?.main?.temp_min;
     humidity = weatherData?.main?.humidity;
-    isCloud = weatherData?.clouds?.all > 50 ? true : false
+    isCloud = weatherData?.clouds?.all > 1 ? true : false
   }
     
   return (
@@ -87,7 +107,14 @@ export default function Home() {
     >
       <div className="flex flex-col w-full min-w-[21rem] max-w-[30rem]">
         
-          <div className="flex gap-2 mb-16 max-h-8 w-full max-510:mb-24">
+          <div className={`
+              flex gap-2 
+              ${(notFound && errorMessage) ? `mb-2` : `mb-24`}
+              max-h-8 
+              w-full 
+              max-510:${(notFound && errorMessage) ? `mb-2` : `mb-24`}`
+              }
+          >
             <Input 
               placeholder="Country/City"
               style={{
@@ -95,7 +122,7 @@ export default function Home() {
               }}
               value={location}
               onChange={(e) => handleInput(e)}
-              className="bg-primaryPurple border-0 placeholder-white custom-input"
+              className={`bg-primaryPurple border-0 placeholder-white custom-input ${notFound && `shake-animation`}`}
             />
           
             <SquareButton 
@@ -104,7 +131,19 @@ export default function Home() {
             />
           </div>
 
-          <div className="flex flex-col w-full gap-2 p-6 items-center rounded-3xl bg-secondaryPurple relative">
+          {notFound && (
+                    <div className="min-h-[2rem] flex justify-center">
+                        <p>{errorMessage}</p>
+                    </div>
+                )}
+          {notFound && <div className='min-h-[4rem] mb-22'/>}
+
+          <div className={`
+              flex flex-col w-full 
+              gap-2 p-6 items-center 
+              rounded-3xl bg-secondaryPurple 
+              relative
+            `}>
               
               <div 
                 className={`absolute min-h-[5rem] min-w-[5rem] 
@@ -127,7 +166,7 @@ export default function Home() {
                       </p>
 
                       <p className="text-white font-bold leading-none degree-text">
-                        {`${temperature ? temperature : '0'}º`}
+                        {`${temperature ? temperature : 'N/A'}º`}
                       </p>
                    
                       <div className="flex gap-2 justify-start general-text">
@@ -136,13 +175,13 @@ export default function Home() {
                           { !highest && `H: N/A`}
                         </p>
                         <p>
-                          { lowest && `H: ${lowest}º`}
-                          { !lowest && `H: N/A`}
+                          { lowest && `L: ${lowest}º`}
+                          { !lowest && `L: N/A`}
                         </p>
                       </div>
 
                       <p className="text-white font-bold general-text">
-                        {countryName ? countryName : ''}
+                        {countryName ? countryName : 'Location: N/A'}
                       </p>
                   </div>
                   
@@ -151,14 +190,14 @@ export default function Home() {
                     style={{ paddingTop: '3.75rem' }}
                   >
                     <p className="text-white general-text">
-                      {isCloud ? 'Clouds' : 'No Clouds'}
+                      {isCloud ? 'Clouds' : 'No Clouds Data'}
                     </p>
                     <p className="text-white general-text">
                       {humidity && `Humidity: ${humidity}%`}
                       {!humidity && `Humidity: N/A`}
                     </p>
                     <p className="text-white general-text">
-                      {date ? date : null}
+                      {date ? date : 'Date: N/A'}
                     </p>
                   </div>
               </div>
@@ -170,7 +209,7 @@ export default function Home() {
                       </p>
 
                       <p className="text-white font-bold leading-none degree-text">
-                        {`${weatherData?.main?.temp}º`}
+                        {`${temperature ? temperature : 'N/A'}º`}
                       </p>
                    
                       <div className="flex gap-2 justify-start general-text">
@@ -179,18 +218,18 @@ export default function Home() {
                           { !highest && `H: N/A`}
                         </p>
                         <p>
-                          { lowest && `H: ${lowest}º`}
-                          { !lowest && `H: N/A`}
+                          { lowest && `L: ${lowest}º`}
+                          { !lowest && `L: N/A`}
                         </p>
                       </div>
 
                       <div className='flex justify-evenly w-full gap-4'>
                         <p className="text-white font-bold general-text">
-                          {countryName ? countryName : ''}
+                          {countryName ? countryName : 'Location: N/A'}
                         </p>
 
                         <p className="text-white general-text">
-                          {date ? date : null}
+                          {date ? date : 'Date: N/A'}
                         </p>
 
                         <p className="text-white general-text">
@@ -199,7 +238,7 @@ export default function Home() {
                         </p>
 
                         <p className="text-white general-text">
-                          {isCloud ? 'Clouds' : 'No Clouds'}
+                          {isCloud ? 'Clouds' : 'No Clouds Data'}
                         </p>
                       </div>
                   </div>
@@ -219,12 +258,20 @@ export default function Home() {
                               location={data.location}
                               dateTime={data.time}
                               isMobile={isMobile}
+                              handleSearch={handleSearch}
+                              id={index}
+                              handleDelete={deleteFromHistoryList}
+                              fullList={historyList}
                             />
                         </div>
                       )
                     })}
 
-                    {historyList.length === 0 && <h1>No Record</h1>}
+                    {historyList.length === 0 && 
+                    <div className='flex justify-center items-center'>
+                      <h1 className='font-bold'>No Record</h1>
+                    </div>
+                    }
                   </div>
                   
               </div>
