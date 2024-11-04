@@ -27,7 +27,7 @@ body {
         26,
         0.5
     ) !important; /* Your custom purple color */
-    color: white !important; /* Text color */
+    color: white; /* Text color */
 }
 
 .custom-input:focus {
@@ -40,6 +40,20 @@ body {
     border-color: transparent; /* Optional: remove the border */
 }
 
+.custom-input-light {
+    background-color: rgb(190, 170, 229);
+    color: black;
+}
+
+.custom-input-light:focus {
+    background-color: rgb(
+        190,
+        170,
+        229
+    ) !important; /* Maintain the same background color on focus */
+    border-color: transparent; /* Optional: remove the border */
+}
+
 .custom-search-btn {
     background-color: rgba(
         26,
@@ -47,12 +61,24 @@ body {
         26,
         0.5
     ) !important; /* Your custom purple color */
-    color: white !important; /* Text color */
+    color: white; /* Text color */
+}
+
+.custom-search-btn-light {
+    background-color: rgb(
+        101,
+        60,
+        169
+    ) !important; /* Your custom purple color */
+    color: white; /* Text color */
 }
 
 .cloud-size-small-view {
-    left: 80%;
-    top: 8%;
+    /* clamp(min, preferred, max) allows you to specify a value that adapts to screen sizes within the defined range. */
+    /* the element won’t go left beyond 70% of its container */
+    /* 80vw is the preferred size, aligning the element based on the viewport width */
+    /* restricting the element to not exceed 80% of the container’s width */
+    left: clamp(70%, 80vw, 80%); /* Responsive left position */
 }
 
 .general-text {
@@ -65,6 +91,22 @@ body {
 
 .small-text {
     font-size: 10px;
+}
+
+.color-white {
+    color: white;
+}
+
+.color-black {
+    color: black;
+}
+
+.color-grey {
+    color: rgb(116, 116, 116);
+}
+
+.color-light-purple {
+    color: rgb(101, 60, 169);
 }
 
 @keyframes shake {
@@ -88,19 +130,12 @@ body {
 
 @media (max-width: 510px) {
     .cloud-size-small-view {
-        left: 80%;
-        top: 2%;
+        left: clamp(72%, 78vw, 80%); /* Adjust for smaller screens */
     }
 }
 
 @media (max-width: 400px) {
     .cloud-size-small-view {
-        left: 78%;
-    }
-}
-
-@media (max-width: 370px) {
-    .cloud-size-small-view {
-        left: 75%;
+        left: clamp(78%, 76vw, 78%);
     }
 }

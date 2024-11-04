@@ -2,14 +2,21 @@
 
 import React from "react";
 import { Button } from "antd";
+import { useSelector } from "react-redux";
+import { selectTheme } from "@/slices/themeSlice";
 
 function SquareButton({ icon, handleOnClick }) {
+    const theme = useSelector(selectTheme);
     return (
         <div>
             <Button
                 icon={icon}
                 onClick={handleOnClick}
-                className="bg-primaryPurple border-0 custom-search-btn"
+                className={`${
+                    theme === "dark"
+                        ? `bg-primaryPurple custom-search-btn`
+                        : `custom-search-btn-light`
+                } border-0 `}
             />
         </div>
     );
