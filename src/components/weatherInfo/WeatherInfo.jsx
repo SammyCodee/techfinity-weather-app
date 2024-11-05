@@ -90,7 +90,7 @@ function WeatherInfo({
                 </div>
             ) : (
                 <div className="flex min-h-[8rem] w-full px-2">
-                    <div className="flex flex-col justify-start gap-1">
+                    <div className="flex flex-col justify-start gap-1 sm:w-full">
                         <p
                             className={`${
                                 theme === "dark"
@@ -128,7 +128,7 @@ function WeatherInfo({
                             </p>
                         </div>
 
-                        <div className="flex justify-evenly w-full gap-4">
+                        <div className="flex justify-between items-center w-full gap-4">
                             <div>
                                 <p
                                     className={`${
