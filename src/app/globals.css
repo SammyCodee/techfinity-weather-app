@@ -85,6 +85,10 @@ body {
     font-size: 14px;
 }
 
+.large-screen-text {
+    font-size: 12px;
+}
+
 .degree-text {
     font-size: 54px;
 }

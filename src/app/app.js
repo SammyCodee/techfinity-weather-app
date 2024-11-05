@@ -24,7 +24,9 @@ export default function App() {
   const [location, setLocation] = useState('');
   const [notFound, setNotFound] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
-  const isMobile = width < 510; // You can adjust the breakpoint as needed
+
+  /** You can adjust the breakpoint as needed, need to adjust the screens under tailwind.config.js */ 
+  const isMobile = width < 510; 
 
   const initData = (value) => {
     const getCurrentDateTime = (new Date).toLocaleString();
@@ -190,7 +192,7 @@ export default function App() {
                 humidity={humidity}
               />
 
-              <div className={`flex flex-col min-h-[8rem] p-4 gap-4 mt-2 w-full  rounded-3xl ${
+              <div className={`flex flex-col min-h-[8rem] p-4 gap-4 mt-1 w-full  rounded-3xl ${
                                 theme === "dark"
                                     ? `bg-tertiaryPurple`
                                     : `bg-lightSecondaryPurple`

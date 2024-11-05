@@ -99,7 +99,7 @@ function WeatherInfo({
                                 theme === "dark"
                                     ? `color-white`
                                     : `color-black font-semibold`
-                            } general-text`}
+                            } large-screen-text`}
                         >
                             Today's Weather
                         </p>
@@ -119,7 +119,7 @@ function WeatherInfo({
                                 theme === "dark"
                                     ? `color-white`
                                     : `color-black font-semibold`
-                            } flex gap-2 justify-start general-text`}
+                            } flex gap-2 justify-start large-screen-text`}
                         >
                             <p>
                                 {highest && `H: ${highest}º`}
@@ -138,7 +138,7 @@ function WeatherInfo({
                                         theme === "dark"
                                             ? `color-white`
                                             : `color-grey`
-                                    } font-bold general-text`}
+                                    } font-bold large-screen-text`}
                                 >
                                     {countryName && countryCode
                                         ? `${countryName}, ${countryCode}`
@@ -152,7 +152,7 @@ function WeatherInfo({
                                         theme === "dark"
                                             ? `color-white`
                                             : `color-grey`
-                                    } general-text`}
+                                    } large-screen-text`}
                                 >
                                     {date ? date : "Date: N/A"}
                                 </p>
@@ -164,7 +164,7 @@ function WeatherInfo({
                                         theme === "dark"
                                             ? `color-white`
                                             : `color-grey`
-                                    }  general-text`}
+                                    }  large-screen-text`}
                                 >
                                     {humidity && `Humidity: ${humidity}%`}
                                     {!humidity && `Humidity: N/A`}
@@ -177,7 +177,7 @@ function WeatherInfo({
                                         theme === "dark"
                                             ? `color-white`
                                             : `color-grey`
-                                    } general-text`}
+                                    } large-screen-text`}
                                 >
                                     {isCloud ? "Clouds" : "No Clouds Data"}
                                 </p>

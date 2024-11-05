@@ -21,11 +21,11 @@ function HistoryItem({
 
     return (
         <div
-            className={`flex items-center w-full py-2 px-4 rounded-2xl  h-[3.5rem] ${
+            className={`flex items-center w-full py-2 px-3 rounded-2xl  h-[3.5rem] ${
                 theme === "dark" ? `bg-customPurple` : `bg-lightTertiaryPurple`
             }`}
         >
-            <div className="flex flex-1 flex-col sm:flex-1">
+            <div className="flex flex-col flex-1 sm:flex-1">
                 <p
                     className={`${
                         theme === "dark"
@@ -48,7 +48,7 @@ function HistoryItem({
                 )}
             </div>
 
-            <div className="flex flex-1 justify-end items-center gap-2 sm:flex-2">
+            <div className="flex flex-1 sm:flex-2 justify-end items-center gap-2">
                 {!isMobile && (
                     <p
                         className={`${
