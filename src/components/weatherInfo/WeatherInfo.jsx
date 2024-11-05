@@ -8,6 +8,7 @@ function WeatherInfo({
     highest,
     lowest,
     countryName,
+    countryCode,
     isCloud,
     date,
     humidity,
@@ -56,7 +57,9 @@ function WeatherInfo({
                                 theme === "dark" ? `color-white` : `color-grey`
                             }`}
                         >
-                            {countryName ? countryName : "Location: N/A"}
+                            {countryName && countryCode
+                                ? `${countryName}, ${countryCode} `
+                                : "Location: N/A"}
                         </p>
                     </div>
 
@@ -128,7 +131,7 @@ function WeatherInfo({
                             </p>
                         </div>
 
-                        <div className="flex justify-between items-center w-full gap-4">
+                        <div className="flex justify-between items-center w-full gap-2">
                             <div>
                                 <p
                                     className={`${
@@ -137,8 +140,8 @@ function WeatherInfo({
                                             : `color-grey`
                                     } font-bold general-text`}
                                 >
-                                    {countryName
-                                        ? countryName
+                                    {countryName && countryCode
+                                        ? `${countryName}, ${countryCode}`
                                         : "Location: N/A"}
                                 </p>
                             </div>

@@ -93,9 +93,10 @@ export default function App() {
     }
   }
 
-  let countryName, temperature, highest, lowest, humidity, isCloud;
+  let countryName, countryCode, temperature, highest, lowest, humidity, isCloud;
   if(weatherData){
     countryName = weatherData?.name;
+    countryCode = weatherData?.sys?.country;
     temperature = weatherData?.main?.temp;
     highest = weatherData?.main?.temp_max;
     lowest = weatherData?.main?.temp_min;
@@ -105,12 +106,12 @@ export default function App() {
     
   return (
     <div 
-      className="flex min-h-screen justify-center p-4 gap-2 bg-cover bg-center min-w-[23rem] overflow-x-hidden sm:font-[family-name:var(--font-geist-sans)]"
+      className="flex min-h-screen justify-center p-4 gap-2 bg-cover bg-center min-w-[24rem] overflow-x-hidden sm:font-[family-name:var(--font-geist-sans)]"
       style={{
         backgroundImage: `${theme === 'dark' ? `url('/image/bg-dark.png')` : `url('/image/bg-light.png')`}`
       }}
     >
-      <div className="flex flex-col w-full min-w-[22rem] max-w-[30rem]">
+      <div className="flex flex-col w-full min-h-screen min-w-[23rem] max-w-[30rem]">
         
           <div className={`
               flex gap-2 
@@ -127,6 +128,11 @@ export default function App() {
               }}
               value={location}
               onChange={(e) => handleInput(e)}
+              onKeyDown={(e) => {
+                if (e.key === 'Enter') {
+                    handleSearch(location);
+                }
+              }}
               className={`${theme === 'dark' ? 
                 `bg-primaryPurple placeholder-white custom-input`
                 : `bg-lightPrimaryPurple placeholder-black custom-input-light`} 
@@ -178,6 +184,7 @@ export default function App() {
                 highest={highest}
                 lowest={lowest}
                 countryName={countryName}
+                countryCode={countryCode}
                 isCloud={isCloud}
                 date={date}
                 humidity={humidity}
