@@ -16,8 +16,8 @@ module.exports = {
         customPurple: "rgb(37, 33, 57)",
         customGray: "rgb(110, 102, 128)",
         lightPrimaryPurple: "rgba(190, 170, 229, 1)",
-        lightSecondaryPurple: "rgba(190, 170, 229, 0.3)",
-        lightTertiaryPurple: "rgb(227, 217, 243)",
+        lightSecondaryPurple: "rgba(204, 185, 232, 0.8)",
+        lightTertiaryPurple: "rgba(227, 217, 243, 0.8)",
         customLightPurple: "rgb(101, 60, 169)"
         // lightSecondaryPurple: "rgb(207, 193, 235)",
         

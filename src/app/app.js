@@ -183,8 +183,16 @@ export default function App() {
                 humidity={humidity}
               />
 
-              <div className="flex flex-col min-h-[8rem] p-4 gap-4 mt-2 w-full bg-tertiaryPurple rounded-3xl">
-                  <p className="text-white general-text">
+              <div className={`flex flex-col min-h-[8rem] p-4 gap-4 mt-2 w-full  rounded-3xl ${
+                                theme === "dark"
+                                    ? `bg-tertiaryPurple`
+                                    : `bg-lightSecondaryPurple`
+                            }`}>
+                  <p className={`${
+                                theme === "dark"
+                                    ? `color-white`
+                                    : `color-black font-semibold`
+                            } general-text`}>
                     Search History
                   </p>
 
@@ -207,7 +215,11 @@ export default function App() {
 
                     {historyList.length === 0 && 
                     <div className='flex justify-center items-center'>
-                      <h1 className='font-bold'>No Record</h1>
+                      <h1 className={`${
+                                theme === "dark"
+                                    ? `color-white`
+                                    : `color-black`
+                            } font-bold`}>No Record</h1>
                     </div>
                     }
                   </div>
@@ -216,13 +228,15 @@ export default function App() {
 
           </div>
 
-      </div>
-
-      <div 
-        className="fixed bottom-0 right-0  min-h-[6rem] min-w-[2.5rem] rounded-2xl"
+          <div 
+        className="flex self-end mt-8 min-h-[6rem] min-w-[2.5rem] rounded-2xl"
       >
         <ThemeSwitcher/>
       </div>
+
+      </div>
+
+      
     </div>
   );
 }
