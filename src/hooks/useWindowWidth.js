@@ -5,19 +5,30 @@ const useWindowWidth = () => {
     const [windowWidth, setWindowWidth] = useState(0);
 
     useEffect(() => {
-        // Only access `window` on the client side
+        let timeout;
+        /**
+         * Only access `window` on the client side
+         * setTimeout to add the debounce effect
+         */
         const handleResize = () => {
-            setWindowWidth(window.innerWidth);
+            clearTimeout(timeout);
+            timeout = setTimeout(() => {
+                setWindowWidth(window.innerWidth);
+            }, 300)
         };
 
         // Set initial width on client-side only
         handleResize();
 
-        // Add resize event listener
+        /**
+         * Add resize event listener
+         * Must use the text 'resize' as it is a standard event emitted by the browser when the window is resized
+         */
         window.addEventListener('resize', handleResize);
 
         // Clean up event listener on unmount
         return () => {
+            clearTimeout(timeout)
             window.removeEventListener('resize', handleResize);
         };
     }, []);
